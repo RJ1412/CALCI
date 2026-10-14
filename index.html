@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prism — unique calculator</title>
+    <meta name="description" content="Prism is a glassmorphic calculator with dark mode, live expressions, scientific keys, and a refract readout." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("prism-theme");
+          var theme =
+            saved === "light" || saved === "dark"
+              ? saved
+              : window.matchMedia("(prefers-color-scheme: light)").matches
+                ? "light"
+                : "dark";
+          document.documentElement.setAttribute("data-theme", theme);
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="aurora" aria-hidden="true">
+      <span class="orb orb-a"></span>
+      <span class="orb orb-b"></span>
+      <span class="orb orb-c"></span>
+    </div>
+
+    <main class="stage">
+      <section class="calc" aria-label="Prism calculator">
+        <header class="topbar">
+          <div class="brand">
+            <span class="mark" aria-hidden="true"></span>
+            <div>
+              <p class="name">Prism</p>
+              <p class="tag">live glass calculator</p>
+            </div>
+          </div>
+          <div class="controls">
+            <div class="seg" role="group" aria-label="Keypad mode">
+              <button type="button" id="mode-basic" class="seg-btn is-on" aria-pressed="true">
+                Basic
+              </button>
+              <button type="button" id="mode-sci" class="seg-btn" aria-pressed="false">
+                Sci
+              </button>
+            </div>
+            <button type="button" id="theme-toggle" class="icon-btn" aria-label="Switch to light mode">
+              <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M14.3 2.3a1 1 0 0 1 1.1 1.5A8 8 0 1 0 20.2 16a1 1 0 0 1 1.6 1.1A10 10 0 1 1 14.3 2.3z"
+                />
+              </svg>
+              <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 4a1 1 0 0 1 1-1h0a1 1 0 0 1 1 1v1a1 1 0 0 1-2 0V4zm0 14a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1zm8-6a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1zM3 12a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1zm13.95-6.36a1 1 0 0 1 1.41 0l.71.7a1 1 0 1 1-1.41 1.42l-.71-.71a1 1 0 0 1 0-1.41zM4.93 17.66a1 1 0 0 1 1.41 0l.71.71a1 1 0 0 1-1.41 1.41l-.71-.7a1 1 0 0 1 0-1.42zm12.73 2.12.71.71a1 1 0 0 1-1.41 1.41l-.71-.71a1 1 0 1 1 1.41-1.41zM6.34 4.93l.71.71A1 1 0 1 1 5.64 7L4.93 6.34A1 1 0 0 1 6.34 4.93zM12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z"
+                />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="screen">
+          <p class="expr" id="expression" aria-live="polite"></p>
+          <p class="result" id="result">0</p>
+          <p class="status" id="status" aria-live="assertive"></p>
+        </div>
+
+        <div class="refract" id="refract" aria-label="Result in other forms">
+          <button type="button" class="chip" data-copy="dec">
+            <span>DEC</span><b id="chip-dec">0</b>
+          </button>
+          <button type="button" class="chip" data-copy="sci">
+            <span>SCI</span><b id="chip-sci">0e+0</b>
+          </button>
+          <button type="button" class="chip" data-copy="bin">
+            <span>BIN</span><b id="chip-bin">—</b>
+          </button>
+          <button type="button" class="chip" data-copy="frac">
+            <span>FRAC</span><b id="chip-frac">0</b>
+          </button>
+        </div>
+
+        <div class="pad" data-mode="basic">
+          <div class="sci-row" aria-label="Scientific keys">
+            <button type="button" class="key fn" data-fn="(">(</button>
+            <button type="button" class="key fn" data-fn=")">)</button>
+            <button type="button" class="key fn" data-fn="pi">π</button>
+            <button type="button" class="key fn" data-fn="e">e</button>
+            <button type="button" class="key fn" data-fn="sin">sin</button>
+            <button type="button" class="key fn" data-fn="cos">cos</button>
+            <button type="button" class="key fn" data-fn="tan">tan</button>
+            <button type="button" class="key fn" data-fn="sqrt">√</button>
+            <button type="button" class="key fn" data-fn="ln">ln</button>
+            <button type="button" class="key fn" data-fn="log">log</button>
+            <button type="button" class="key fn" data-fn="fact">n!</button>
+            <button type="button" class="key fn" data-fn="pow">x<sup>y</sup></button>
+          </div>
+
+          <div class="mem-row" aria-label="Memory">
+            <button type="button" class="key ghost" data-act="mc">MC</button>
+            <button type="button" class="key ghost" data-act="mr">MR</button>
+            <button type="button" class="key ghost" data-act="mplus">M+</button>
+            <button type="button" class="key ghost" data-act="mminus">M−</button>
+            <button type="button" class="key ghost" id="angle-toggle" aria-pressed="true">DEG</button>
+          </div>
+
+          <div class="keys" aria-label="Calculator keypad">
+            <button type="button" class="key warn" data-act="clear">C</button>
+            <button type="button" class="key warn" data-act="back">⌫</button>
+            <button type="button" class="key op" data-op="%">%</button>
+            <button type="button" class="key op" data-op="/">÷</button>
+
+            <button type="button" class="key num" data-digit="7">7</button>
+            <button type="button" class="key num" data-digit="8">8</button>
+            <button type="button" class="key num" data-digit="9">9</button>
+            <button type="button" class="key op" data-op="*">×</button>
+
+            <button type="button" class="key num" data-digit="4">4</button>
+            <button type="button" class="key num" data-digit="5">5</button>
+            <button type="button" class="key num" data-digit="6">6</button>
+            <button type="button" class="key op" data-op="-">−</button>
+
+            <button type="button" class="key num" data-digit="1">1</button>
+            <button type="button" class="key num" data-digit="2">2</button>
+            <button type="button" class="key num" data-digit="3">3</button>
+            <button type="button" class="key op" data-op="+">+</button>
+
+            <button type="button" class="key num" data-act="sign">±</button>
+            <button type="button" class="key num" data-digit="0">0</button>
+            <button type="button" class="key num" data-digit=".">.</button>
+            <button type="button" class="key eq" data-act="equals">=</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="tape" aria-label="Calculation history">
+        <div class="tape-head">
+          <h2>Tape</h2>
+          <button type="button" class="text-btn" id="clear-tape">Clear</button>
+        </div>
+        <ol id="history" class="history"></ol>
+        <p class="hint">Click a line to reuse it. Click a refract chip to copy.</p>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
